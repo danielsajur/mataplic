@@ -1,7 +1,5 @@
 package unifacs.grafos.models;
 
-
-
 public class Aresta {
 
 	private String id;

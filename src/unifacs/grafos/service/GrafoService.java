@@ -106,4 +106,38 @@ public class GrafoService {
 	public void setArestas(List<Aresta> arestas) {
 		this.arestas = arestas;
 	}
+
+	public int[][] generateMatrizAdjacencia(Grafo grafo) {
+
+		int numeroVertices = grafo.getVertices().size();
+		
+		int[][] matriz = new int[numeroVertices][numeroVertices];
+		
+		for (int i = 0; i < numeroVertices; i++) {
+			
+			Vertice verticeEntrada = grafo.getVertices().get(i);
+			
+			for (int j = 0; j < numeroVertices; j++) {
+				
+				Vertice verticeSaida = grafo.getVertices().get(j);
+				
+				for(Aresta aresta : grafo.getArestas()){
+					
+					matriz[i][j] = 0;
+					
+					if(verticeEntrada.equals(aresta.getVerticeEntrada()) 
+							&& verticeSaida.equals(aresta.getVerticeSaida())){
+						
+						matriz[i][j] = 1;
+						break;
+					}
+					
+				}
+				
+			}
+		}
+		
+		return matriz;
+	}
+	
 }
