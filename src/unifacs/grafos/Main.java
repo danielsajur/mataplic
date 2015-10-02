@@ -1,6 +1,9 @@
 package unifacs.grafos;
 
+import java.util.List;
+
 import unifacs.grafos.models.Grafo;
+import unifacs.grafos.models.Vertice;
 import unifacs.grafos.service.GrafoService;
 
 
@@ -13,6 +16,23 @@ public class Main {
 		int[][] matriz = service.generateMatrizAdjacencia(grafo);
 		
 		print(matriz, grafo);
+		
+		System.out.println("");
+		
+		System.out.println("Grau minimo: "+ service.ObterGrauMinimo(grafo));
+		System.out.println("Grau maximo: "+ service.ObterGrauMaximo(grafo));
+		System.out.println("Grau medio: "+ service.ObterGrauMedio(grafo));
+		
+		Vertice verticeTestado = grafo.getVertices().get(2);
+		
+		List<Vertice> verticesAdjacentes = service.getVerticesAdjacentes(verticeTestado);
+		
+		System.out.println("Vertices adjacentes de " + verticeTestado.getId());
+		
+		for (Vertice vertice : verticesAdjacentes) {
+			System.out.println(vertice.getId());
+		}
+		
 	}
 
 	private static void print(int[][] matriz, Grafo grafo) {
@@ -38,4 +58,5 @@ public class Main {
 
 		
 	}
+
 }

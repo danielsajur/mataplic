@@ -2,7 +2,6 @@ package unifacs.grafos.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import unifacs.grafos.dao.GrafoDao;
 import unifacs.grafos.models.Aresta;
@@ -36,7 +35,7 @@ public class GrafoService {
 			
 			Vertice item = new Vertice();
 			item.setId(str);
-			vertices.add(item);
+			addVertice(vertices, item);
 		}
 	}
 	
@@ -51,15 +50,11 @@ public class GrafoService {
 			Vertice verticeSaida = findVerticeById(str.split("-")[1]); 
 
 			Aresta aresta = new Aresta();
-			aresta.setId(str + "_" + getRandomNumberAsString());
+			aresta.setId(str);
 			aresta.setVerticeEntrada(verticeEntrada);
 			aresta.setVerticeSaida(verticeSaida);
-			arestas.add(aresta);
+			addAresta(arestas, aresta);
 		}
-	}
-	
-	private String getRandomNumberAsString() {
-		return String.valueOf(((new Random().nextFloat() + 100000) * 900000));
 	}
 	
 	private void populateVerticesWithAresatas() {
@@ -138,6 +133,90 @@ public class GrafoService {
 		}
 		
 		return matriz;
+	}
+	
+	public boolean addAresta(List<Aresta> arestas, Aresta aresta) {
+		
+		return temArestaParalela(aresta, arestas) ? false : arestas.add(aresta);
+	}
+	
+	public boolean addVertice(List<Vertice> vertices, Vertice vertice) {
+		return vertices.add(vertice);
+	}
+	
+	private boolean temArestaParalela(Aresta aresta, List<Aresta> arestas) {
+		return arestas.contains(aresta);
+	}
+	
+	public int obterGrau(Vertice vertice) {
+		return vertice.getArestas().size() - 2;
+	}
+	
+	public boolean removerAresta(Aresta aresta, List<Aresta> arestas){
+		return arestas.remove(aresta);
+	}
+	
+	public boolean removerVertice(Grafo grafo, Vertice vertice){
+		
+		for(Aresta aresta : vertice.getArestas()) {
+			removerAresta(aresta, grafo.getArestas());
+		}
+		
+		return vertices.remove(vertice);
+	}
+	
+	public int ObterGrauMinimo(Grafo grafo){
+		
+		int grauMinimo = 9999;
+		
+		for(Vertice vertice : grafo.getVertices()){
+			int grau = obterGrau(vertice);
+			
+			if(grau < grauMinimo){
+				grauMinimo = grau;
+			}
+		}
+		
+		return grauMinimo;
+	}
+
+	public int ObterGrauMaximo(Grafo grafo){
+		
+		int grauMaximo = 0;
+		
+		for(Vertice vertice : grafo.getVertices()){
+			int grau = obterGrau(vertice);
+			
+			if(grau > grauMaximo){
+				grauMaximo = grau;
+			}
+		}
+		
+		return grauMaximo;
+	}
+	
+	public int ObterGrauMedio(Grafo grafo){
+		
+		int somaGraus = 0;
+		
+		for(Vertice vertice : grafo.getVertices()){
+			somaGraus += obterGrau(vertice);
+		}
+		
+		return somaGraus/grafo.getVertices().size();
+	}
+	
+	public List<Vertice> getVerticesAdjacentes(Vertice vertice){
+		
+		List<Vertice> adjacentes = new ArrayList<Vertice>();
+		
+		 for (Aresta aresta : vertice.getArestas()){
+			 if(!aresta.getVerticeSaida().equals(vertice)){
+				 adjacentes.add(aresta.getVerticeSaida());
+			 }
+		 }
+		 
+		return adjacentes;
 	}
 	
 }
