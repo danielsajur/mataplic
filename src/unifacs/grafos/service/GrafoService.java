@@ -10,72 +10,94 @@ import unifacs.grafos.models.Vertice;
 
 public class GrafoService {
 
-	private List<Vertice> vertices;
-	private List<Aresta> arestas;
+	private List<String> listaVertices; 
+	private List<String> listaArestas;
 	
-	public Grafo createGrafo() {
+	public GrafoService() {
+		listaVertices =  new ArrayList<String>();
+		listaArestas =  new ArrayList<String>();
+	}
+	
+	public Grafo criar() {
 		
-		createVertices(GrafoDao.getValue("vertices"));
-		createArestas(GrafoDao.getValue("arestas"));
-		populateVerticesWithAresatas();
+		for(String v : GrafoDao.getValue("vertices").split(",")){
+			listaVertices.add(v);
+		}
 
+		for(String a : GrafoDao.getValue("arestas").split(",")){
+			listaArestas.add(a);
+		}
+		
+		return criar(listaVertices, listaArestas);
+	}
+	
+	public Grafo criar(List<String> arrVertices, List<String> arrArestas) {
+		
+		List<Vertice> vertices = createVertices(arrVertices);
+		List<Aresta> arestas = createArestas(arrArestas, vertices);
+		return gerar(vertices, arestas);
+		
+	}
+	
+	private Grafo gerar(final List<Vertice> vertices, final List<Aresta> arestas) {
+		populateVerticesWithAresatas(vertices, arestas);
 		Grafo grafo = new Grafo();
 		grafo.setArestas(arestas);
 		grafo.setVertices(vertices);
-		
 		return grafo;
 	}
-	
-	private void createVertices(String values) {
+
+	private List<Vertice> createVertices(List<String> strVertices) {
 		
-		if(vertices == null)
-			vertices = new ArrayList<Vertice>();
-		
-		for (String str : values.split(",")) {
-			
+		List<Vertice> vertices = new ArrayList<Vertice>();
+		for (String strVertice : strVertices) {
 			Vertice item = new Vertice();
-			item.setId(str);
+			item.setId(strVertice);
 			addVertice(vertices, item);
 		}
+		
+		return vertices;
+		
 	}
 	
-	private void createArestas(String values) {
+	private List<Aresta> createArestas(List<String> strArestas, List<Vertice> vertices) {
 		
-		if(arestas == null)
-			arestas = new ArrayList<Aresta>();
+		List<Aresta> arestas = new ArrayList<Aresta>();
 		
-		for (String str : values.split(",")) {
+		for (String strAresta : strArestas) {
 			
-			Vertice verticeEntrada = findVerticeById(str.split("-")[0]); 
-			Vertice verticeSaida = findVerticeById(str.split("-")[1]); 
+			Vertice verticeEntrada = findVerticeById(strAresta.split("-")[0], vertices); 
+			Vertice verticeSaida = findVerticeById(strAresta.split("-")[1], vertices); 
 
 			Aresta aresta = new Aresta();
-			aresta.setId(str);
+			aresta.setId(strAresta);
 			aresta.setVerticeEntrada(verticeEntrada);
 			aresta.setVerticeSaida(verticeSaida);
 			addAresta(arestas, aresta);
 		}
+		
+		return arestas;
 	}
 	
-	private void populateVerticesWithAresatas() {
+	private void populateVerticesWithAresatas(final List<Vertice> vertices, final List<Aresta> arestas) {
 		
 		for (Vertice vertice : vertices) {
-			findArestasByVertice(vertice);
+			findArestasByVertice(vertice, arestas);
 		}
 	}
 	
-	private void findArestasByVertice(Vertice vertice) {
+	private void findArestasByVertice(final Vertice vertice, final List<Aresta> arestas) {
 		
 		vertice.setArestas(new ArrayList<Aresta>());
 		
 		for (Aresta aresta : arestas) {
-			if(aresta.getVerticeEntrada().getId().equals(vertice.getId()) 
-					|| aresta.getVerticeSaida().getId().equals(vertice.getId()))
+			if(aresta.getVerticeEntrada().equals(vertice) 
+					|| aresta.getVerticeSaida().equals(vertice))
 				vertice.getArestas().add(aresta);
 		}
 	}
 	
-	private Vertice findVerticeById(String value) {
+	private Vertice findVerticeById(String value, List<Vertice> vertices) {
 		
 		for (Vertice vertice : vertices) {
 			if(vertice.getId().equals(value))
@@ -84,22 +106,6 @@ public class GrafoService {
 		
 		return null;
 		
-	}
-
-	public List<Vertice> getVertices() {
-		return vertices;
-	}
-
-	public void setVertices(List<Vertice> vertices) {
-		this.vertices = vertices;
-	}
-
-	public List<Aresta> getArestas() {
-		return arestas;
-	}
-
-	public void setArestas(List<Aresta> arestas) {
-		this.arestas = arestas;
 	}
 
 	public int[][] generateMatrizAdjacencia(Grafo grafo) {
@@ -136,11 +142,15 @@ public class GrafoService {
 	}
 	
 	public boolean addAresta(List<Aresta> arestas, Aresta aresta) {
-		
-		return temArestaParalela(aresta, arestas) ? false : arestas.add(aresta);
+		if(temArestaParalela(aresta, arestas)){
+			return false;
+		}else{
+			arestas.add(aresta);
+			return true;
+		}
 	}
 	
-	public boolean addVertice(List<Vertice> vertices, Vertice vertice) {
+	public boolean addVertice(final List<Vertice> vertices, Vertice vertice) {
 		return vertices.add(vertice);
 	}
 	
@@ -153,21 +163,25 @@ public class GrafoService {
 	}
 	
 	public boolean removerAresta(Aresta aresta, List<Aresta> arestas){
-		return arestas.remove(aresta);
+		boolean removido = arestas.remove(aresta);
+		listaArestas.remove(aresta.getId());
+		return removido;
 	}
 	
-	public boolean removerVertice(Grafo grafo, Vertice vertice){
+	public boolean removerVertice(final Grafo grafo, Vertice vertice){
 		
 		for(Aresta aresta : vertice.getArestas()) {
 			removerAresta(aresta, grafo.getArestas());
 		}
 		
-		return vertices.remove(vertice);
+		boolean removido = grafo.getVertices().remove(vertice);
+		listaVertices.remove(vertice.getId());
+		return removido;
 	}
 	
 	public int ObterGrauMinimo(Grafo grafo){
 		
-		int grauMinimo = 9999;
+		int grauMinimo = 99999;
 		
 		for(Vertice vertice : grafo.getVertices()){
 			int grau = obterGrau(vertice);
@@ -218,5 +232,9 @@ public class GrafoService {
 		 
 		return adjacentes;
 	}
-	
+
+	public Grafo atualizar(Grafo grafo) {
+		return gerar(grafo.getVertices(), grafo.getArestas());
+	}
+
 }

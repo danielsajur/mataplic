@@ -7,6 +7,13 @@ public class Vertice {
 	private String id;
 	private List<Aresta> arestas;
 
+	public Vertice() {
+	}
+	
+	public Vertice(String id) {
+		this.id = id;
+	}
+	
 	public List<Aresta> getArestas() {
 		return arestas;
 	}
