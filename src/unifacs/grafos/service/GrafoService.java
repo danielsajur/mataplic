@@ -108,39 +108,6 @@ public class GrafoService {
 		
 	}
 
-	public int[][] generateMatrizAdjacencia(Grafo grafo) {
-
-		int numeroVertices = grafo.getVertices().size();
-		
-		int[][] matriz = new int[numeroVertices][numeroVertices];
-		
-		for (int i = 0; i < numeroVertices; i++) {
-			
-			Vertice verticeEntrada = grafo.getVertices().get(i);
-			
-			for (int j = 0; j < numeroVertices; j++) {
-				
-				Vertice verticeSaida = grafo.getVertices().get(j);
-				
-				for(Aresta aresta : grafo.getArestas()){
-					
-					matriz[i][j] = 0;
-					
-					if(verticeEntrada.equals(aresta.getVerticeEntrada()) 
-							&& verticeSaida.equals(aresta.getVerticeSaida())){
-						
-						matriz[i][j] = 1;
-						break;
-					}
-					
-				}
-				
-			}
-		}
-		
-		return matriz;
-	}
-	
 	public boolean addAresta(List<Aresta> arestas, Aresta aresta) {
 		if(temArestaParalela(aresta, arestas)){
 			return false;
@@ -158,9 +125,6 @@ public class GrafoService {
 		return arestas.contains(aresta);
 	}
 	
-	public int obterGrau(Vertice vertice) {
-		return vertice.getArestas().size() - 2;
-	}
 	
 	public boolean removerAresta(Aresta aresta, List<Aresta> arestas){
 		boolean removido = arestas.remove(aresta);
@@ -177,47 +141,6 @@ public class GrafoService {
 		boolean removido = grafo.getVertices().remove(vertice);
 		listaVertices.remove(vertice.getId());
 		return removido;
-	}
-	
-	public int ObterGrauMinimo(Grafo grafo){
-		
-		int grauMinimo = 99999;
-		
-		for(Vertice vertice : grafo.getVertices()){
-			int grau = obterGrau(vertice);
-			
-			if(grau < grauMinimo){
-				grauMinimo = grau;
-			}
-		}
-		
-		return grauMinimo;
-	}
-
-	public int ObterGrauMaximo(Grafo grafo){
-		
-		int grauMaximo = 0;
-		
-		for(Vertice vertice : grafo.getVertices()){
-			int grau = obterGrau(vertice);
-			
-			if(grau > grauMaximo){
-				grauMaximo = grau;
-			}
-		}
-		
-		return grauMaximo;
-	}
-	
-	public int ObterGrauMedio(Grafo grafo){
-		
-		int somaGraus = 0;
-		
-		for(Vertice vertice : grafo.getVertices()){
-			somaGraus += obterGrau(vertice);
-		}
-		
-		return somaGraus/grafo.getVertices().size();
 	}
 	
 	public List<Vertice> getVerticesAdjacentes(Vertice vertice){

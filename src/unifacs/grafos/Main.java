@@ -1,5 +1,6 @@
 package unifacs.grafos;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -10,6 +11,21 @@ import unifacs.grafos.service.GrafoService;
 
 public class Main {
 
+	private static List<String> MENU;
+	
+	static{
+		MENU = new ArrayList<String>();
+		MENU.add("Novo Vertice");
+		MENU.add("Remover Vertice");
+		MENU.add("Nova Aresta (x-y)");
+		MENU.add("Remover Aresta (x-y)");
+		MENU.add("Grau mínimo, máximo e médio");
+		MENU.add("Vertices Adjacentes");
+		MENU.add("Matriz de Adjacências");
+		MENU.add("Verifica Grafo Conexo");
+		MENU.add("S a i r");
+	}
+	
 	@SuppressWarnings("resource")
 	public static void main(String[] args) {
 
@@ -20,7 +36,7 @@ public class Main {
 		Scanner scanner = new Scanner(System.in);
 		int itemMenu = 0;
 
-		while(itemMenu < 8){
+		while(itemMenu < MENU.size()){
 			
 			printMenu();
 			System.out.print("\nInforme sua opção: ");
@@ -40,7 +56,7 @@ public class Main {
 				removerAresta(service, grafo);
 				break;
 			case 5:
-				printGrau(service, grafo);
+				printGrau(grafo);
 				break;
 			case 6:
 				printVerticesAdjacentes(service, grafo);
@@ -48,8 +64,8 @@ public class Main {
 			case 7:
 				print(service, grafo);
 				break;
-			default:
-				print(service, grafo);
+			case 8:
+				printGrafoConexo(grafo);
 				break;
 			}
 			
@@ -58,11 +74,21 @@ public class Main {
 		
 	}
 
+	private static void printGrafoConexo(Grafo grafo) {
+		
+		if(grafo.isConexo()){
+			System.out.println("\n  Este Grafo é conexo.");
+		}else{
+			System.out.println("\n  Este Grafo não é conexo.");
+		}
+		
+	}
+
 	private static void printVerticesAdjacentes(final GrafoService service, final Grafo grafo) {
 		
 		Vertice verticeTestado = selecionarVertice(service, grafo, null);
 		List<Vertice> verticesAdjacentes = service.getVerticesAdjacentes(verticeTestado);
-		System.out.println("Vertices adjacentes de " + verticeTestado.getId());
+		System.out.println("  Vertices adjacentes de " + verticeTestado.getId());
 		for (Vertice vertice : verticesAdjacentes) {
 			System.out.println(vertice.getId());
 		}		
@@ -76,8 +102,8 @@ public class Main {
 
 	private static void adicionarAresta(final GrafoService service, Grafo grafo) {
 		
-		Vertice verticeSaida = selecionarVertice(service, grafo, "Selecione o Vértice de saída: ");
-		Vertice verticeEntrada = selecionarVertice(service, grafo, "Selecione o Vértice de entrada: ");
+		Vertice verticeSaida = selecionarVertice(service, grafo, "  Selecione o Vértice de saída: ");
+		Vertice verticeEntrada = selecionarVertice(service, grafo, "  Selecione o Vértice de entrada: ");
 		String id = verticeEntrada.getId()+"-"+verticeSaida.getId();
 		
 		Aresta aresta = new Aresta();
@@ -138,30 +164,25 @@ public class Main {
 		return verticeEscolhido;
 	}
 
-	private static void printGrau(final GrafoService service, final Grafo grafo) {
-		System.out.println("Grau minimo: " + service.ObterGrauMinimo(grafo));
-		System.out.println("Grau maximo: " + service.ObterGrauMaximo(grafo));
-		System.out.println("Grau medio: " + service.ObterGrauMedio(grafo));
+	private static void printGrau(final Grafo grafo) {
+		System.out.println("Grau minimo: " + grafo.grauMinimo());
+		System.out.println("Grau maximo: " + grafo.grauMaximo());
+		System.out.println("Grau medio: " + grafo.grauMedio());
 	}
 
 	private static void printMenu() {
 		
 		System.out.println("\n\n M E N U\n");
-		System.out.println(" 1 - Novo Vertice");
-		System.out.println(" 2 - Remover Vertice");
-		System.out.println(" 3 - Nova Aresta (x-y)");
-		System.out.println(" 4 - Remover Aresta (x-y)");
-		System.out.println(" 5 - Grau mínimo, máximo e médio");
-		System.out.println(" 6 - Vertices Adjacentes");
-		System.out.println(" 7 - Matriz de Adjacências");
-		System.out.println(" 8 - S a i r");
+		int i = 0;
+		for(String itemMenu : MENU){
+			System.out.println((++i) + " - " + itemMenu);
+		}
 		
 	}
 
 	private static void print(GrafoService service, Grafo grafo) {
 
-		grafo = service.atualizar(grafo);
-		int[][] matriz = service.generateMatrizAdjacencia(grafo);
+		int[][] matriz = service.atualizar(grafo).matrizAdjacencias();
 		
 		System.out.print("  ");
 		for (int i = 0; i < grafo.getVertices().size(); i++) {
