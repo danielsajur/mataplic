@@ -117,30 +117,51 @@ public class GrafoService {
 		}
 	}
 	
-	public boolean addVertice(final List<Vertice> vertices, Vertice vertice) {
+	public boolean addVertice(List<Vertice> vertices, Vertice vertice) {
 		return vertices.add(vertice);
 	}
 	
 	private boolean temArestaParalela(Aresta aresta, List<Aresta> arestas) {
-		return arestas.contains(aresta);
+		boolean contains = arestas.contains(aresta);
+		if(contains){
+			System.out.println("A aresta já existe! Não é permito aresta paralela!");
+		}
+		return contains;
 	}
 	
 	
-	public boolean removerAresta(Aresta aresta, List<Aresta> arestas){
-		boolean removido = arestas.remove(aresta);
-		listaArestas.remove(aresta.getId());
-		return removido;
+	public void removerAresta(Aresta aresta, List<Aresta> arestas){
+		
+		String[] split = aresta.getId().split("-");
+		String id1 = split[0]+"-"+split[1];
+		String id2 = split[1]+"-"+split[0];
+		
+		List<Aresta> arestasRemovidas = new ArrayList<Aresta>();
+		
+		int i = 0;
+		for(Aresta a : arestas){
+			
+			if(a.getId().equals(id1) || a.getId().equals(id2)){
+				arestasRemovidas.add(arestas.get(i));
+				listaArestas.remove(a.getId());
+			}
+			
+			i++;
+		}
+		
+		for(Aresta a : arestasRemovidas){
+			arestas.remove(a);
+		}
 	}
 	
-	public boolean removerVertice(final Grafo grafo, Vertice vertice){
+	public void removerVertice(final Grafo grafo, Vertice vertice){
 		
 		for(Aresta aresta : vertice.getArestas()) {
 			removerAresta(aresta, grafo.getArestas());
 		}
 		
-		boolean removido = grafo.getVertices().remove(vertice);
+		grafo.getVertices().remove(vertice);
 		listaVertices.remove(vertice.getId());
-		return removido;
 	}
 	
 	public List<Vertice> getVerticesAdjacentes(Vertice vertice){

@@ -15,14 +15,15 @@ public class Main {
 	
 	static{
 		MENU = new ArrayList<String>();
-		MENU.add("Novo Vertice");
-		MENU.add("Remover Vertice");
-		MENU.add("Nova Aresta (x-y)");
-		MENU.add("Remover Aresta (x-y)");
-		MENU.add("Grau mínimo, máximo e médio");
-		MENU.add("Vertices Adjacentes");
-		MENU.add("Matriz de Adjacências");
-		MENU.add("Verifica Grafo Conexo");
+		MENU.add(" Adicionar Vertice");
+		MENU.add(" Remover Vertice");
+		MENU.add(" Adicionar Aresta (x-y)");
+		MENU.add(" Remover Aresta (x-y)");
+		MENU.add(" Obter grau mínimo, máximo e médio");
+		MENU.add(" Obter vertices Adjacentes");
+		MENU.add(" Gerar Matriz de Adjacências");
+		MENU.add(" Verificar Grafo Conexo");
+		MENU.add(" Verificar Grafo Euleriano");
 		MENU.add("S a i r");
 	}
 	
@@ -67,11 +68,25 @@ public class Main {
 			case 8:
 				printGrafoConexo(grafo);
 				break;
+			case 9:
+				printGrafoEuleriano(grafo);
+				break;
 			}
 			
-			grafo = service.atualizar(grafo);
+			if(itemMenu < MENU.size()){
+				grafo = service.atualizar(grafo);
+			}
 		}
 		
+	}
+
+	private static void printGrafoEuleriano(Grafo grafo) {
+
+		if(grafo.temCaminhoEuleriano()){
+			System.out.println("\n  Existe um caminho de Euler.");
+		}else{
+			System.out.println("\n  Não existe um caminho de Euler.");
+		}
 	}
 
 	private static void printGrafoConexo(Grafo grafo) {
@@ -118,11 +133,11 @@ public class Main {
 	private static Aresta selecionarAresta(GrafoService service, Grafo grafo) {
 
 		Scanner scanner = new Scanner(System.in);
-		System.out.println(" 	Selecione um vertice:");
 		int indice = 0;
 		for (Aresta aresta : grafo.getArestas()) {
 			System.out.println("  " + (++indice) + " - Vertice " + aresta.getId());
 		}
+		System.out.print(" 	Selecione um vertice:");
 		
 		int indiceEscolhido = scanner.nextInt()-1;
 		return grafo.getArestas().get(indiceEscolhido);
@@ -165,14 +180,14 @@ public class Main {
 	}
 
 	private static void printGrau(final Grafo grafo) {
-		System.out.println("Grau minimo: " + grafo.grauMinimo());
-		System.out.println("Grau maximo: " + grafo.grauMaximo());
-		System.out.println("Grau medio: " + grafo.grauMedio());
+		System.out.println("  Grau minimo: " + grafo.grauMinimo());
+		System.out.println("  Grau maximo: " + grafo.grauMaximo());
+		System.out.println("  Grau medio: " + grafo.grauMedio());
 	}
 
 	private static void printMenu() {
 		
-		System.out.println("\n\n M E N U\n");
+		System.out.println("\n\n  M E N U\n");
 		int i = 0;
 		for(String itemMenu : MENU){
 			System.out.println((++i) + " - " + itemMenu);

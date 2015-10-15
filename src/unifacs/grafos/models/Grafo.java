@@ -93,13 +93,13 @@ public class Grafo {
 					if(!id.equals(vertice.getId())){
 						arestas.add(id);
 					}
-				}catch(Exception e){
-					System.out.println(e.getMessage());
-				}
+				}catch(Exception e){ }
 			}
 		}
 		
-		return arestas.size();
+		int size = arestas.size();
+		
+		return size;
 	}
 	
 	public boolean isConexo() {
@@ -165,5 +165,21 @@ public class Grafo {
 		}
 		
 		return matriz;
+	}
+	
+	public boolean temCaminhoEuleriano(){
+		
+		int numeroGrausImpar = 0;
+		boolean grausPar = true;
+		
+		for(Vertice vertice : getVertices()){
+			if(grau(vertice) % 2 != 0){
+				grausPar = false;
+				numeroGrausImpar++;
+			}
+		}
+		
+		return ((numeroGrausImpar == 2 || grausPar) && isConexo());
+		
 	}
 }
