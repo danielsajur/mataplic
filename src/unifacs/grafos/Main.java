@@ -102,8 +102,8 @@ public class Main {
 
 	private static void adicionarAresta(final GrafoService service, Grafo grafo) {
 		
-		Vertice verticeSaida = selecionarVertice(service, grafo, "  Selecione o Vértice de saída: ");
-		Vertice verticeEntrada = selecionarVertice(service, grafo, "  Selecione o Vértice de entrada: ");
+		Vertice verticeSaida = selecionarVertice(service, grafo, "Selecione o Vértice de saída: ");
+		Vertice verticeEntrada = selecionarVertice(service, grafo, "Selecione o Vértice de entrada: ");
 		String id = verticeEntrada.getId()+"-"+verticeSaida.getId();
 		
 		Aresta aresta = new Aresta();
@@ -151,14 +151,14 @@ public class Main {
 			System.out.println("  " + (indice++) + " - Vertice " + vertice.getId());
 		}
 		
-		if(texto != null && !texto.trim().isEmpty()){
-			System.out.println(" 	" + texto);
-		}else{
-			System.out.print(" 	Selecione um vertice: ");
+		if(texto == null || texto.trim().isEmpty()){
+			texto = "Selecione um vertice: ";
 		}
 		
+		System.out.print(" 	" + texto);
 		Scanner scanner = new Scanner(System.in);
 		int indiceEscolhido = scanner.nextInt();
+		
 		Vertice verticeEscolhido = grafo.getVertices().get(indiceEscolhido-1);
 		System.out.println(" 	\nO vertice escolhido: " + verticeEscolhido.getId());
 		return verticeEscolhido;
