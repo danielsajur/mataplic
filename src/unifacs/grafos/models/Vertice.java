@@ -1,6 +1,8 @@
 package unifacs.grafos.models;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Vertice {
 
@@ -58,6 +60,25 @@ public class Vertice {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+	
+public int grau(){
+		
+		Set<String> arestas = new HashSet<String>();
+		
+		for(Aresta aresta : getArestas()){
+			for(String id : aresta.getId().split("-")){
+				try{
+					if(!id.equals(getId())){
+						arestas.add(id);
+					}
+				}catch(Exception e){ }
+			}
+		}
+		
+		int size = arestas.size();
+		
+		return size;
 	}
 
 }

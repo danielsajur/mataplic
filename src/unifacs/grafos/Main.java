@@ -1,5 +1,6 @@
 package unifacs.grafos;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -76,6 +77,12 @@ public class Main {
 			if(itemMenu < MENU.size()){
 				grafo = service.atualizar(grafo);
 			}
+
+			try {
+				
+				System.in.read();
+				Runtime.getRuntime().exec("clear");
+			} catch (IOException e) { }
 		}
 		
 	}

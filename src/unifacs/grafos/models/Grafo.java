@@ -1,8 +1,6 @@
 package unifacs.grafos.models;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class Grafo {
 
@@ -47,7 +45,7 @@ public class Grafo {
 		int grauMinimo = 99999;
 		
 		for(Vertice vertice : getVertices()){
-			int grau = grau(vertice);
+			int grau = vertice.grau();
 			
 			if(grau < grauMinimo){
 				grauMinimo = grau;
@@ -62,7 +60,7 @@ public class Grafo {
 		int grauMaximo = 0;
 		
 		for(Vertice vertice : getVertices()){
-			int grau = grau(vertice);
+			int grau = vertice.grau();
 			
 			if(grau > grauMaximo){
 				grauMaximo = grau;
@@ -77,31 +75,13 @@ public class Grafo {
 		int somaGraus = 0;
 		
 		for(Vertice vertice : getVertices()){
-			somaGraus += grau(vertice);
+			somaGraus += vertice.grau();
 		}
 		
 		return somaGraus/getVertices().size();
 	}
 
-	public int grau(Vertice vertice){
 		
-		Set<String> arestas = new HashSet<String>();
-		
-		for(Aresta aresta : vertice.getArestas()){
-			for(String id : aresta.getId().split("-")){
-				try{
-					if(!id.equals(vertice.getId())){
-						arestas.add(id);
-					}
-				}catch(Exception e){ }
-			}
-		}
-		
-		int size = arestas.size();
-		
-		return size;
-	}
-	
 	public boolean isConexo() {
 
 		int[][] matriz = matrizAdjacencias();
@@ -173,7 +153,7 @@ public class Grafo {
 		boolean grausPar = true;
 		
 		for(Vertice vertice : getVertices()){
-			if(grau(vertice) % 2 != 0){
+			if(vertice.grau() % 2 != 0){
 				grausPar = false;
 				numeroGrausImpar++;
 			}
