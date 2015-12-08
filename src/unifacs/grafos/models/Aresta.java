@@ -5,7 +5,16 @@ public class Aresta {
 	private String id;
 	private Vertice verticeEntrada;
 	private Vertice verticeSaida;
-
+	private int Peso;
+	
+	public int getPeso(){
+		return Peso;
+	}
+	
+	public void setPeso(int peso){
+		this.Peso = peso;		
+	}
+	
 	public Vertice getVerticeEntrada() {
 		return verticeEntrada;
 	}

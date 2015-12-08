@@ -13,7 +13,7 @@ public class Vertice {
 	}
 	
 	public Vertice(String id) {
-		this.id = id;
+		this.id = id;		
 	}
 	
 	public List<Aresta> getArestas() {
