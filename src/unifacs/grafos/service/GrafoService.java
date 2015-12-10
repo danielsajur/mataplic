@@ -14,8 +14,6 @@ public class GrafoService {
 
 	private List<String> listaVertices;
 	private List<String> listaArestas;
-//	private List<Vertice> vertices = new ArrayList<Vertice>();
-//	private List<Aresta> arestas = new ArrayList<Aresta>();
 
 	public GrafoService() {
 		listaVertices = new ArrayList<String>();
@@ -82,7 +80,7 @@ public class GrafoService {
 			aresta.setVerticeEntrada(verticeEntrada);
 			aresta.setVerticeSaida(verticeSaida);
 			aresta.setPeso(p);
-			
+
 			addAresta(arestas, aresta);
 			p = p + 10;
 		}
@@ -194,12 +192,13 @@ public class GrafoService {
 		return gerar(grafo.getVertices(), grafo.getArestas());
 	}
 
-	public void ExcuteAlgoritmoDijkstra(Grafo grafo, String idVerticeOrigem, String idVerticeDestino) {
+	public void ExcuteAlgoritmoDijkstra(Grafo grafo, String idVerticeOrigem,
+			String idVerticeDestino) {
 
 		Dijkstra dijkstra = new Dijkstra(grafo);
 		Vertice verticeOrigem = grafo.getVertice(idVerticeOrigem);
 		Vertice verticeDestino = grafo.getVertice(idVerticeDestino);
-		
+
 		dijkstra.Execute(verticeOrigem);
 		LinkedList<Vertice> caminho = dijkstra.getCaminho(verticeDestino);
 
@@ -208,15 +207,5 @@ public class GrafoService {
 		}
 
 	}
-
-//	private void addAresta(String laneId, int sourceLocNo, int destLocNo, int duration) {
-//		Aresta aresta = new Aresta();// laneId,nodes.get(sourceLocNo),
-//										// nodes.get(destLocNo), duration);
-//		aresta.setId(laneId);
-//		aresta.setVerticeEntrada(vertices.get(sourceLocNo));
-//		aresta.setVerticeSaida(vertices.get(destLocNo));
-//		aresta.setPeso(duration);
-//		arestas.add(aresta);
-//	}
 
 }
