@@ -66,7 +66,6 @@ public class GrafoService {
 			List<Vertice> vertices) {
 
 		List<Aresta> arestas = new ArrayList<Aresta>();
-		int p = 10;
 
 		for (String strAresta : strArestas) {
 
@@ -79,10 +78,9 @@ public class GrafoService {
 			aresta.setId(strAresta);
 			aresta.setVerticeEntrada(verticeEntrada);
 			aresta.setVerticeSaida(verticeSaida);
-			aresta.setPeso(p);
+			aresta.setPeso(Integer.valueOf(strAresta.split("-")[2]));
 
 			addAresta(arestas, aresta);
-			p = p + 10;
 		}
 
 		return arestas;
@@ -96,7 +94,7 @@ public class GrafoService {
 		}
 	}
 
-	private void findArestasByVertice(final Vertice vertice,
+    private void findArestasByVertice(final Vertice vertice,
 			final List<Aresta> arestas) {
 
 		vertice.setArestas(new ArrayList<Aresta>());

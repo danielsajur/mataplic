@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import unifacs.grafos.models.Aresta;
-import unifacs.grafos.models.FloydWarshall;
+import unifacs.grafos.models.BellmanFord;
 import unifacs.grafos.models.Grafo;
 import unifacs.grafos.models.Vertice;
 import unifacs.grafos.service.GrafoService;
@@ -28,6 +28,7 @@ public class Main {
 		MENU.add(" Verificar Grafo Euleriano");
 		MENU.add(" Algoritmo de Dijkstra");
 		MENU.add(" Algoritmo de Floyd Warshall");
+		MENU.add(" Algoritmo de Belmanford");
 		MENU.add("S a i r");
 	}
 
@@ -83,10 +84,14 @@ public class Main {
 				ExcuteAlgoritmoDijkstra(service, grafo, idVerticeOrigem, idVerticeDestino);
 				break;
 			case 11:
-				int[][] matrizAdjacencias = service.atualizar(grafo).matrizAdjacencias();
-				FloydWarshall floydWarshall = new FloydWarshall();
-				int[][] caminhoMinimo = floydWarshall.getCaminhoMinimo(matrizAdjacencias);
-				printMatrizAdjacencias(grafo, caminhoMinimo);
+//				int[][] matrizAdjacencias = service.atualizar(grafo).matrizAdjacencias();
+//				FloydWarshall floydWarshall = new FloydWarshall();
+//				int[][] caminhoMinimo = floydWarshall.getCaminhoMinimo(matrizAdjacencias);
+//				printMatrizAdjacencias(grafo, caminhoMinimo);
+//				break;
+			case 12:
+				BellmanFord ford = new BellmanFord();
+				ford.verificaMenorCaminho(grafo, grafo.getVertices().get(3));
 				break;
 			}
 

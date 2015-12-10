@@ -173,7 +173,7 @@ public class Grafo {
 
 	public Vertice getVertice(String idVertice) {
 		
-		for (Vertice vertice : this.vertices) {
+		for (Vertice vertice : vertices) {
 			if (vertice.getId().equals(idVertice)) {
 				return vertice;
 			}

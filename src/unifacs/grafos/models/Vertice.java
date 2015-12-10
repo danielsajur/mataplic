@@ -8,9 +8,9 @@ public class Vertice {
 
 	private String id;
 	private List<Aresta> arestas;
+	private Double distancia;
 
-	public Vertice() {
-	}
+	public Vertice() {}
 	
 	public Vertice(String id) {
 		this.id = id;		
@@ -80,5 +80,13 @@ public int grau(){
 		
 		return size;
 	}
+
+public Double getDistancia() {
+	return distancia;
+}
+
+public void setDistancia(Double distancia) {
+	this.distancia = distancia;
+}
 
 }
