@@ -143,7 +143,7 @@ public class Grafo {
 					if (verticeEntrada.equals(aresta.getVerticeEntrada())
 							&& verticeSaida.equals(aresta.getVerticeSaida())) {
 
-						matriz[i][j] = 1;
+						matriz[i][j] = aresta.getPeso();
 						break;
 					}
 
@@ -172,7 +172,7 @@ public class Grafo {
 	}
 
 	public Vertice getVertice(String idVertice) {
-		
+
 		for (Vertice vertice : vertices) {
 			if (vertice.getId().equals(idVertice)) {
 				return vertice;
